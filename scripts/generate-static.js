@@ -812,9 +812,9 @@ body {
         <div class="container header-content">
             <div class="logo">🤖 AI新闻推送</div>
             <nav class="nav">
-                <a href="/" class="active">首页</a>
-                <a href="/ai-tech.html">AI技术</a>
-                <a href="/industry.html">行业动态</a>
+                <a href="index.html" class="active">首页</a>
+                <a href="ai-tech.html">AI技术</a>
+                <a href="industry.html">行业动态</a>
             </nav>
         </div>
     </header>
@@ -879,7 +879,7 @@ body {
             <div class="news-card-header">
                 <div class="news-card-content">
                     <h2 class="news-card-title">
-                        <a href="/news/${news.id}.html" style="color: inherit; text-decoration: none;">
+                        <a href="news/${news.id}.html" style="color: inherit; text-decoration: none;">
                             ${news.title}
                         </a>
                     </h2>
@@ -922,9 +922,9 @@ body {
         <div class="container header-content">
             <div class="logo">🤖 AI新闻推送</div>
             <nav class="nav">
-                <a href="/">首页</a>
-                <a href="/ai-tech.html" ${category === 'ai-tech' ? 'class="active"' : ''}>AI技术</a>
-                <a href="/industry.html" ${category === 'industry' ? 'class="active"' : ''}>行业动态</a>
+                <a href="index.html">首页</a>
+                <a href="ai-tech.html" ${category === 'ai-tech' ? 'class="active"' : ''}>AI技术</a>
+                <a href="industry.html" ${category === 'industry' ? 'class="active"' : ''}>行业动态</a>
             </nav>
         </div>
     </header>
@@ -1014,15 +1014,15 @@ body {
         <div class="container header-content">
             <div class="logo">🤖 AI新闻推送</div>
             <nav class="nav">
-                <a href="/">首页</a>
-                <a href="/ai-tech.html">AI技术</a>
-                <a href="/industry.html">行业动态</a>
+                <a href="../index.html">首页</a>
+                <a href="../ai-tech.html">AI技术</a>
+                <a href="../industry.html">行业动态</a>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <a href="/" class="back-button">← 返回首页</a>
+        <a href="../index.html" class="back-button">← 返回首页</a>
         
         <article class="news-detail">
             <h1 class="news-detail-title">${item.title}</h1>

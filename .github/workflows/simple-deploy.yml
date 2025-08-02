@@ -31,6 +31,9 @@ jobs:
       run: npm ci
       
     - name: Generate static site
+      env:
+        GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
+        VITE_GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
       run: npm run generate
       
     - name: Setup Pages
