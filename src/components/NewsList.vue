@@ -26,12 +26,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-
-dayjs.locale('zh-cn')
+import { useNewsStore } from '../stores/newsStore'
 
 const props = defineProps({
   category: {
@@ -41,84 +38,83 @@ const props = defineProps({
 })
 
 const router = useRouter()
-const newsList = ref([])
-const loading = ref(false)
-const finished = ref(false)
-const refreshing = ref(false)
-const page = ref(1)
+const newsStore = useNewsStore()
 
-const formatDate = (date) => {
-  return dayjs(date).format('MM-DD HH:mm')
-}
+const refreshing = ref(false)
+const loading = computed(() => newsStore.isLoading)
+const finished = computed(() => {
+  switch (props.category) {
+    case 'latest':
+      return !newsStore.hasMore.latest
+    case 'ai-tech':
+      return !newsStore.hasMore['ai-tech']
+    case 'industry':
+      return !newsStore.hasMore.industry
+    default:
+      return true
+  }
+})
+
+const newsList = computed(() => {
+  switch (props.category) {
+    case 'latest':
+      return newsStore.getLatestNews
+    case 'ai-tech':
+      return newsStore.getAiTechNews
+    case 'industry':
+      return newsStore.getIndustryNews
+    default:
+      return []
+  }
+})
 
 const goToDetail = (news) => {
   router.push(`/news/${news.id}`)
 }
 
-const fetchNews = async () => {
+const onLoad = async () => {
   try {
-    // 模拟新闻数据
-    const mockNews = [
-      {
-        id: 1,
-        title: 'OpenAI发布GPT-5，性能大幅提升',
-        description: 'OpenAI最新发布的GPT-5在多个基准测试中表现优异，推理能力和创造性显著增强...',
-        source: 'AI科技日报',
-        publishedAt: new Date(Date.now() - 3600000).toISOString(),
-        image: 'https://via.placeholder.com/100x80'
-      },
-      {
-        id: 2,
-        title: '谷歌推出新一代AI模型Gemini Ultra',
-        description: '谷歌宣布Gemini Ultra在数学、推理和代码生成方面超越了现有模型...',
-        source: 'AI新闻周刊',
-        publishedAt: new Date(Date.now() - 7200000).toISOString(),
-        image: 'https://via.placeholder.com/100x80'
-      },
-      {
-        id: 3,
-        title: 'Meta开源LLaMA 3，商用可用',
-        description: 'Meta发布了LLaMA 3系列模型，性能强劲且允许商业使用...',
-        source: '机器之心',
-        publishedAt: new Date(Date.now() - 10800000).toISOString()
-      }
-    ]
-
-    // 模拟API延迟
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    if (refreshing.value) {
-      newsList.value = mockNews
-      refreshing.value = false
-    } else {
-      newsList.value.push(...mockNews)
-    }
-    
-    page.value++
-    
-    // 模拟数据加载完成
-    if (page.value > 3) {
-      finished.value = true
+    switch (props.category) {
+      case 'latest':
+        await newsStore.fetchLatestNews()
+        break
+      case 'ai-tech':
+        await newsStore.fetchAiTechNews()
+        break
+      case 'industry':
+        await newsStore.fetchIndustryNews()
+        break
     }
   } catch (error) {
-    console.error('获取新闻失败:', error)
-  } finally {
-    loading.value = false
+    console.error('加载新闻失败:', error)
   }
 }
 
-const onLoad = () => {
-  fetchNews()
-}
-
-const onRefresh = () => {
-  finished.value = false
-  page.value = 1
-  fetchNews()
+const onRefresh = async () => {
+  try {
+    switch (props.category) {
+      case 'latest':
+        await newsStore.fetchLatestNews(true)
+        break
+      case 'ai-tech':
+        await newsStore.fetchAiTechNews(true)
+        break
+      case 'industry':
+        await newsStore.fetchIndustryNews(true)
+        break
+    }
+  } catch (error) {
+    console.error('刷新新闻失败:', error)
+  } finally {
+    refreshing.value = false
+  }
 }
 
 onMounted(() => {
-  fetchNews()
+  // 如果对应分类没有数据，则加载
+  if (newsList.value.length === 0) {
+    onLoad()
+  }
 })
 </script>
 
