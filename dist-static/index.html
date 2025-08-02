@@ -135,6 +135,39 @@ main {
   font-size: 0.75rem;
 }
 
+/* AI Commentary */
+.ai-commentary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.ai-commentary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.ai-commentary-content {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.ai-commentary::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: rotate(45deg);
+}
+
 /* News Detail */
 .news-detail {
   background: white;
@@ -180,6 +213,51 @@ main {
   object-fit: cover;
   border-radius: 8px;
   margin: 1.5rem 0;
+}
+
+/* AI Commentary in Detail Page */
+.ai-commentary-detail {
+  margin: 2rem 0;
+  font-size: 1rem;
+}
+
+.ai-commentary-detail .ai-commentary-label {
+  font-size: 0.875rem;
+}
+
+.ai-commentary-detail .ai-commentary-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Original Content */
+.original-content {
+  background: #f8f9fa;
+  border-left: 4px solid #667eea;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.original-content h3 {
+  color: #667eea;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.original-content h4 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.original-content p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0;
 }
 
 /* Mobile Responsive */
@@ -334,10 +412,11 @@ main {
                         </a>
                     </h2>
                     <p class="news-card-description">真实新闻数据获取失败，请稍后再试或联系管理员配置API密钥。</p>
+                    
                     <div class="news-card-meta">
                         <span class="news-card-source">系统提示</span>
-                        <span class="news-card-time" data-time="2025-08-02T15:01:03.707Z">
-                            2025/8/2 23:01:03
+                        <span class="news-card-time" data-time="2025-08-02T16:12:43.217Z">
+                            2025/8/3 00:12:43
                         </span>
                     </div>
                 </div>

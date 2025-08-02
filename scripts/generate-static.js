@@ -16,9 +16,20 @@ class StaticSiteGenerator {
     this.publicDir = path.join(__dirname, '../public')
     this.newsData = []
     this.categories = ['latest', 'ai-tech', 'industry']
+    
+    // 新闻API密钥
     this.gnewsApiKey = process.env.VITE_GNEWS_API_KEY || process.env.GNEWS_API_KEY
     this.newsdataApiKey = process.env.VITE_NEWSDATA_API_KEY || process.env.NEWSDATA_API_KEY
     this.newsApiKey = process.env.VITE_NEWS_API_KEY || process.env.NEWS_API_KEY
+    
+    // 翻译和AI服务密钥
+    this.siliconflowApiKey = process.env.VITE_SILICONFLOW_API_KEY
+    this.baiduAppId = process.env.VITE_BAIDU_APP_ID
+    this.baiduSecretKey = process.env.VITE_BAIDU_SECRET_KEY
+    this.tencentSecretId = process.env.VITE_TENCENT_SECRET_ID
+    this.tencentSecretKey = process.env.VITE_TENCENT_SECRET_KEY
+    this.alibabaAccessKeyId = process.env.VITE_ALIBABA_ACCESS_KEY_ID
+    this.alibabaAccessKeySecret = process.env.VITE_ALIBABA_ACCESS_KEY_SECRET
   }
 
   // 获取真实新闻数据
@@ -96,47 +107,119 @@ class StaticSiteGenerator {
 
       // 处理最新新闻
       if (latestResponse.data?.articles) {
-        newsData.latest = latestResponse.data.articles.map((article, index) => ({
-          id: `latest_${index + 1}`,
-          title: article.title,
-          description: article.description,
-          content: this.generateContent(article.description, article.content),
-          source: article.source.name,
-          publishedAt: article.publishedAt,
-          image: article.image || 'https://via.placeholder.com/400x200?text=AI+News',
-          category: 'latest',
-          url: article.url
-        }))
+        console.log('🔄 处理最新新闻，添加翻译和AI点评...')
+        const articles = latestResponse.data.articles
+        newsData.latest = []
+        
+        for (let i = 0; i < articles.length; i++) {
+          const article = articles[i]
+          console.log(`  处理新闻 ${i + 1}/${articles.length}: ${article.title.substring(0, 50)}...`)
+          
+          // 翻译标题和描述
+          const translatedTitle = await this.translateText(article.title)
+          const translatedDescription = await this.translateText(article.description)
+          
+          // 生成AI点评
+          const aiCommentary = await this.generateAICommentary({
+            title: article.title,
+            description: article.description
+          })
+          
+          const newsItem = {
+            id: `latest_${i + 1}`,
+            title: translatedTitle,
+            originalTitle: article.title,
+            description: translatedDescription,
+            originalDescription: article.description,
+            content: this.generateContent(translatedDescription, article.content),
+            aiCommentary: aiCommentary,
+            source: article.source.name,
+            publishedAt: article.publishedAt,
+            image: article.image || 'https://via.placeholder.com/400x200?text=AI+News',
+            category: 'latest',
+            url: article.url
+          }
+          
+          newsData.latest.push(newsItem)
+        }
       }
 
       // 处理技术新闻
       if (techResponse.data?.articles) {
-        newsData['ai-tech'] = techResponse.data.articles.map((article, index) => ({
-          id: `ai_tech_${index + 1}`,
-          title: article.title,
-          description: article.description,
-          content: this.generateContent(article.description, article.content),
-          source: article.source.name,
-          publishedAt: article.publishedAt,
-          image: article.image || 'https://via.placeholder.com/400x200?text=AI+Tech',
-          category: 'ai-tech',
-          url: article.url
-        }))
+        console.log('🔄 处理AI技术新闻，添加翻译和AI点评...')
+        const articles = techResponse.data.articles
+        newsData['ai-tech'] = []
+        
+        for (let i = 0; i < articles.length; i++) {
+          const article = articles[i]
+          console.log(`  处理技术新闻 ${i + 1}/${articles.length}: ${article.title.substring(0, 50)}...`)
+          
+          // 翻译标题和描述
+          const translatedTitle = await this.translateText(article.title)
+          const translatedDescription = await this.translateText(article.description)
+          
+          // 生成AI点评
+          const aiCommentary = await this.generateAICommentary({
+            title: article.title,
+            description: article.description
+          })
+          
+          const newsItem = {
+            id: `ai_tech_${i + 1}`,
+            title: translatedTitle,
+            originalTitle: article.title,
+            description: translatedDescription,
+            originalDescription: article.description,
+            content: this.generateContent(translatedDescription, article.content),
+            aiCommentary: aiCommentary,
+            source: article.source.name,
+            publishedAt: article.publishedAt,
+            image: article.image || 'https://via.placeholder.com/400x200?text=AI+Tech',
+            category: 'ai-tech',
+            url: article.url
+          }
+          
+          newsData['ai-tech'].push(newsItem)
+        }
       }
 
       // 处理行业新闻
       if (industryResponse.data?.articles) {
-        newsData.industry = industryResponse.data.articles.map((article, index) => ({
-          id: `industry_${index + 1}`,
-          title: article.title,
-          description: article.description,
-          content: this.generateContent(article.description, article.content),
-          source: article.source.name,
-          publishedAt: article.publishedAt,
-          image: article.image || 'https://via.placeholder.com/400x200?text=AI+Industry',
-          category: 'industry',
-          url: article.url
-        }))
+        console.log('🔄 处理行业动态新闻，添加翻译和AI点评...')
+        const articles = industryResponse.data.articles
+        newsData.industry = []
+        
+        for (let i = 0; i < articles.length; i++) {
+          const article = articles[i]
+          console.log(`  处理行业新闻 ${i + 1}/${articles.length}: ${article.title.substring(0, 50)}...`)
+          
+          // 翻译标题和描述
+          const translatedTitle = await this.translateText(article.title)
+          const translatedDescription = await this.translateText(article.description)
+          
+          // 生成AI点评
+          const aiCommentary = await this.generateAICommentary({
+            title: article.title,
+            description: article.description
+          })
+          
+          const newsItem = {
+            id: `industry_${i + 1}`,
+            title: translatedTitle,
+            originalTitle: article.title,
+            description: translatedDescription,
+            originalDescription: article.description,
+            content: this.generateContent(translatedDescription, article.content),
+            aiCommentary: aiCommentary,
+            source: article.source.name,
+            publishedAt: article.publishedAt,
+            image: article.image || 'https://via.placeholder.com/400x200?text=AI+Industry',
+            category: 'industry',
+            url: article.url
+          }
+          
+          newsData.industry.push(newsItem)
+        }
       }
 
       console.log(`✅ 获取到真实新闻: 最新${newsData.latest.length}条, AI技术${newsData['ai-tech'].length}条, 行业动态${newsData.industry.length}条`)
@@ -275,6 +358,123 @@ class StaticSiteGenerator {
 
     } catch (error) {
       console.error('❌ News API调用失败:', error.message)
+      return null
+    }
+  }
+
+  // 硅基流动翻译
+  async translateWithSiliconFlow(text) {
+    if (!this.siliconflowApiKey || !text) return null
+    
+    try {
+      const response = await axios.post('https://api.siliconflow.cn/v1/chat/completions', {
+        model: 'Qwen/Qwen2.5-7B-Instruct',
+        messages: [
+          {
+            role: 'system',
+            content: '你是一个专业的英中翻译专家。请将用户提供的英文新闻标题和内容翻译成简洁流畅的中文，保持新闻的专业性和准确性。'
+          },
+          {
+            role: 'user',
+            content: `请翻译以下英文新闻内容为中文：\n\n${text}`
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 2000
+      }, {
+        headers: {
+          'Authorization': `Bearer ${this.siliconflowApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 30000
+      })
+
+      return response.data?.choices?.[0]?.message?.content?.trim()
+    } catch (error) {
+      console.error('硅基流动翻译失败:', error.message)
+      return null
+    }
+  }
+
+  // 百度翻译
+  async translateWithBaidu(text) {
+    if (!this.baiduAppId || !this.baiduSecretKey || !text) return null
+    
+    try {
+      const crypto = await import('crypto')
+      const salt = Date.now().toString()
+      const sign = crypto.createHash('md5')
+        .update(this.baiduAppId + text + salt + this.baiduSecretKey)
+        .digest('hex')
+
+      const response = await axios.post('https://fanyi-api.baidu.com/api/trans/vip/translate', null, {
+        params: {
+          q: text,
+          from: 'en',
+          to: 'zh',
+          appid: this.baiduAppId,
+          salt: salt,
+          sign: sign
+        },
+        timeout: 15000
+      })
+
+      if (response.data?.trans_result?.[0]?.dst) {
+        return response.data.trans_result[0].dst
+      }
+      return null
+    } catch (error) {
+      console.error('百度翻译失败:', error.message)
+      return null
+    }
+  }
+
+  // 通用翻译方法（优先级顺序：硅基流动 -> 百度 -> 原文）
+  async translateText(text) {
+    if (!text) return text
+
+    // 优先使用硅基流动
+    let translated = await this.translateWithSiliconFlow(text)
+    if (translated) return translated
+
+    // 备用百度翻译
+    translated = await this.translateWithBaidu(text)
+    if (translated) return translated
+
+    // 返回原文
+    return text
+  }
+
+  // 生成AI点评
+  async generateAICommentary(newsItem) {
+    if (!this.siliconflowApiKey) return null
+
+    try {
+      const response = await axios.post('https://api.siliconflow.cn/v1/chat/completions', {
+        model: 'Qwen/Qwen2.5-7B-Instruct',
+        messages: [
+          {
+            role: 'system',
+            content: '你是一位资深的AI行业分析师。请基于提供的新闻内容，给出专业、简洁的点评分析，包括技术意义、市场影响或行业趋势。控制在2-3句话内。'
+          },
+          {
+            role: 'user',
+            content: `请为以下AI新闻提供专业点评：\n\n标题：${newsItem.title}\n内容：${newsItem.description}`
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      }, {
+        headers: {
+          'Authorization': `Bearer ${this.siliconflowApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 30000
+      })
+
+      return response.data?.choices?.[0]?.message?.content?.trim()
+    } catch (error) {
+      console.error('AI点评生成失败:', error.message)
       return null
     }
   }
@@ -492,6 +692,39 @@ main {
   font-size: 0.75rem;
 }
 
+/* AI Commentary */
+.ai-commentary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.ai-commentary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.ai-commentary-content {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.ai-commentary::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: rotate(45deg);
+}
+
 /* News Detail */
 .news-detail {
   background: white;
@@ -537,6 +770,51 @@ main {
   object-fit: cover;
   border-radius: 8px;
   margin: 1.5rem 0;
+}
+
+/* AI Commentary in Detail Page */
+.ai-commentary-detail {
+  margin: 2rem 0;
+  font-size: 1rem;
+}
+
+.ai-commentary-detail .ai-commentary-label {
+  font-size: 0.875rem;
+}
+
+.ai-commentary-detail .ai-commentary-content {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Original Content */
+.original-content {
+  background: #f8f9fa;
+  border-left: 4px solid #667eea;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.original-content h3 {
+  color: #667eea;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.original-content h4 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.original-content p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0;
 }
 
 /* Mobile Responsive */
@@ -674,6 +952,12 @@ main {
                         </a>
                     </h2>
                     <p class="news-card-description">${news.description}</p>
+                    ${news.aiCommentary ? `
+                    <div class="ai-commentary">
+                        <div class="ai-commentary-label">🤖 AI点评</div>
+                        <div class="ai-commentary-content">${news.aiCommentary}</div>
+                    </div>
+                    ` : ''}
                     <div class="news-card-meta">
                         <span class="news-card-source">${news.source}</span>
                         <span class="news-card-time" data-time="${news.publishedAt}">
@@ -896,6 +1180,21 @@ main {
             <div class="news-detail-content">
                 ${item.content}
             </div>
+            
+            ${item.aiCommentary ? `
+            <div class="ai-commentary ai-commentary-detail">
+                <div class="ai-commentary-label">🤖 AI专业点评</div>
+                <div class="ai-commentary-content">${item.aiCommentary}</div>
+            </div>
+            ` : ''}
+            
+            ${item.originalTitle ? `
+            <div class="original-content">
+                <h3>英文原文</h3>
+                <h4>${item.originalTitle}</h4>
+                <p>${item.originalDescription}</p>
+            </div>
+            ` : ''}
             
             <div class="action-buttons">
                 <a href="${item.url}" target="_blank" class="action-button primary">查看原文</a>
