@@ -16,17 +16,26 @@ class StaticSiteGenerator {
     this.publicDir = path.join(__dirname, '../public')
     this.newsData = []
     this.categories = ['latest', 'ai-tech', 'industry']
-    this.apiKey = process.env.GNEWS_API_KEY || process.env.VITE_GNEWS_API_KEY
+    this.apiKey = process.env.GNEWS_API_KEY || process.env.VITE_GNEWS_API_KEY || process.env.NEWS_API_KEY || process.env.API_KEY
   }
 
   // 获取真实新闻数据
   async fetchRealNewsData() {
+    console.log('🔍 检查API密钥配置...')
+    console.log('GNEWS_API_KEY存在:', !!process.env.GNEWS_API_KEY)
+    console.log('VITE_GNEWS_API_KEY存在:', !!process.env.VITE_GNEWS_API_KEY)
+    console.log('NEWS_API_KEY存在:', !!process.env.NEWS_API_KEY)
+    console.log('API_KEY存在:', !!process.env.API_KEY)
+    console.log('所有环境变量:', Object.keys(process.env).filter(key => key.includes('API') || key.includes('KEY')).join(', '))
+    
     if (!this.apiKey) {
       console.log('⚠️  API密钥未找到，无法获取真实新闻')
+      console.log('请检查GitHub Secrets中的GNEWS_API_KEY配置')
       return null
     }
 
     console.log('🌐 正在调用真实新闻API...')
+    console.log('使用API密钥长度:', this.apiKey.length)
     
     try {
       const newsData = { latest: [], 'ai-tech': [], industry: [] }
