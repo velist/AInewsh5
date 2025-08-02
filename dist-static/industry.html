@@ -52,20 +52,27 @@ body {
 .nav a {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
-.nav a:hover {
-  background-color: rgba(255,255,255,0.2);
+.nav a:hover, .nav a.active {
+  opacity: 0.8;
 }
 
-.nav a.active {
-  background-color: rgba(255,255,255,0.3);
+/* Main Content */
+main {
+  padding: 2rem 0;
+  min-height: calc(100vh - 200px);
 }
 
-/* News Card */
+/* News Cards */
+.news-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
 .news-card {
   background: white;
   border-radius: 8px;
@@ -139,9 +146,10 @@ body {
 
 .news-detail-title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: bold;
   margin-bottom: 1rem;
   color: #2c3e50;
+  line-height: 1.3;
 }
 
 .news-detail-meta {
@@ -151,46 +159,30 @@ body {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #eee;
-}
-
-.news-detail-content {
-  line-height: 1.8;
-  color: #333;
-}
-
-.news-detail-content p {
-  margin-bottom: 1rem;
-}
-
-.news-detail-content h2 {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 1rem 0;
-  color: #2c3e50;
-}
-
-.news-detail-content h3 {
-  font-size: 1.25rem;
-  margin: 1.25rem 0 0.75rem 0;
-  color: #34495e;
-}
-
-/* Footer */
-.footer {
-  background: #2c3e50;
-  color: white;
-  text-align: center;
-  padding: 2rem 0;
-  margin-top: 3rem;
-}
-
-/* Loading */
-.loading {
-  text-align: center;
-  padding: 2rem;
+  font-size: 0.875rem;
   color: #666;
 }
 
-/* Responsive */
+.news-detail-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.news-detail-content p {
+  margin-bottom: 1.5rem;
+}
+
+.news-detail-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -255,6 +247,7 @@ body {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: background-color 0.3s;
 }
@@ -268,6 +261,8 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
 }
 
 .action-button {
@@ -275,32 +270,39 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.primary-button {
+.action-button.primary {
   background: #667eea;
   color: white;
 }
 
-.primary-button:hover {
-  background: #5a6fd8;
+.action-button.secondary {
+  background: #f8f9fa;
+  color: #666;
+  border: 1px solid #ddd;
 }
 
-.secondary-button {
-  background: #6c757d;
-  color: white;
+.action-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.secondary-button:hover {
-  background: #5a6169;
+/* Footer */
+.footer {
+  background: #2c3e50;
+  color: #ecf0f1;
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 4rem;
 }
-    </style>
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+</style>
 </head>
 <body>
     <header class="header">
@@ -315,145 +317,22 @@ body {
     </header>
 
     <main class="container">
-        <div class="category-tabs">
-            <div class="category-tab" onclick="location.href='/'">最新资讯</div>
-            <div class="category-tab " onclick="location.href='/ai-tech.html'">AI技术</div>
-            <div class="category-tab active" onclick="location.href='/industry.html'">行业动态</div>
-        </div>
-
-        <div id="news-container">
+        <h1 style="margin: 2rem 0; color: #2c3e50;">行业动态</h1>
+        
+        <div class="news-grid">
             
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_1.html" style="color: inherit; text-decoration: none;">
-                            AI独角兽Anthropic完成40亿美元C轮融资
-                        </a>
-                    </h2>
-                    <p class="news-card-description">AI安全公司Anthropic完成40亿美元C轮融资，估值达到180亿美元，将加速Constitutional AI技术的研发和应用。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">创投时报</span>
-                        <span class="news-card-time" data-time="2025-08-02T01:54:24.320Z">
-                            2025/8/2 09:54:24
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=400&h=200&fit=crop" alt="AI独角兽Anthropic完成40亿美元C轮融资" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_2.html" style="color: inherit; text-decoration: none;">
-                            AI就业市场爆发：需求增长300%
-                        </a>
-                    </h2>
-                    <p class="news-card-description">最新报告显示，AI相关岗位需求同比增长300%，机器学习工程师、AI研究员成为最热门职业。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">人才市场周刊</span>
-                        <span class="news-card-time" data-time="2025-08-02T04:45:02.699Z">
-                            2025/8/2 12:45:02
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=200&fit=crop" alt="AI就业市场爆发：需求增长300%" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_3.html" style="color: inherit; text-decoration: none;">
-                            中国AI市场规模突破5000亿元
-                        </a>
-                    </h2>
-                    <p class="news-card-description">2024年中国AI市场规模达到5127亿元，同比增长47%，在计算机视觉、自然语言处理等细分领域保持全球领先。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">中国经济报</span>
-                        <span class="news-card-time" data-time="2025-08-02T08:46:54.287Z">
-                            2025/8/2 16:46:54
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&h=200&fit=crop" alt="中国AI市场规模突破5000亿元" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_4.html" style="color: inherit; text-decoration: none;">
-                            AI监管新规即将出台：全球标准化进程加速
-                        </a>
-                    </h2>
-                    <p class="news-card-description">欧盟AI法案正式生效，美国和中国也在制定相应的AI监管框架，全球AI治理进入新阶段。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">科技政策</span>
-                        <span class="news-card-time" data-time="2025-08-02T13:50:33.144Z">
-                            2025/8/2 21:50:33
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=200&fit=crop" alt="AI监管新规即将出台：全球标准化进程加速" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_5.html" style="color: inherit; text-decoration: none;">
-                            汽车行业AI革命：自动驾驶进入L4时代
-                        </a>
-                    </h2>
-                    <p class="news-card-description">特斯拉、百度Apollo等公司宣布L4级自动驾驶技术商业化落地，无人驾驶出租车开始在多个城市试运营。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">汽车科技</span>
-                        <span class="news-card-time" data-time="2025-08-02T03:22:54.305Z">
-                            2025/8/2 11:22:54
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=200&fit=crop" alt="汽车行业AI革命：自动驾驶进入L4时代" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/industry_6.html" style="color: inherit; text-decoration: none;">
-                            金融AI应用爆发：智能投顾管理资产超万亿
-                        </a>
-                    </h2>
-                    <p class="news-card-description">全球智能投顾管理资产规模突破1.2万亿美元，AI在风险控制、算法交易、智能客服等领域应用日趋成熟。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">金融科技</span>
-                        <span class="news-card-time" data-time="2025-08-01T22:49:36.950Z">
-                            2025/8/2 06:49:36
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=200&fit=crop" alt="金融AI应用爆发：智能投顾管理资产超万亿" class="news-card-image">
-            </div>
-        </article>
-    
         </div>
     </main>
 
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 AI新闻推送. 所有权利保留.</p>
+            <p>为您提供最新的AI技术资讯和行业动态</p>
         </div>
     </footer>
 
     <script>
-        // 更新时间的脚本
+        // 时间更新脚本
         document.addEventListener('DOMContentLoaded', function() {
             function updateTimes() {
                 const timeElements = document.querySelectorAll('.news-card-time');

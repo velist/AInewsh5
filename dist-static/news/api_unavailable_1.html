@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>量子-AI混合计算获重大进展 - AI新闻推送</title>
-    <meta name="description" content="IBM与Google联合发布量子-AI混合处理器，将量子计算与神经网络结合，在特定优化问题上实现指数级性能提升。">
+    <title>新闻API暂时不可用 - AI新闻推送</title>
+    <meta name="description" content="真实新闻数据获取失败，请稍后再试或联系管理员配置API密钥。">
     <style>
 * {
   margin: 0;
@@ -52,20 +52,27 @@ body {
 .nav a {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
-.nav a:hover {
-  background-color: rgba(255,255,255,0.2);
+.nav a:hover, .nav a.active {
+  opacity: 0.8;
 }
 
-.nav a.active {
-  background-color: rgba(255,255,255,0.3);
+/* Main Content */
+main {
+  padding: 2rem 0;
+  min-height: calc(100vh - 200px);
 }
 
-/* News Card */
+/* News Cards */
+.news-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
 .news-card {
   background: white;
   border-radius: 8px;
@@ -139,9 +146,10 @@ body {
 
 .news-detail-title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: bold;
   margin-bottom: 1rem;
   color: #2c3e50;
+  line-height: 1.3;
 }
 
 .news-detail-meta {
@@ -151,46 +159,30 @@ body {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #eee;
-}
-
-.news-detail-content {
-  line-height: 1.8;
-  color: #333;
-}
-
-.news-detail-content p {
-  margin-bottom: 1rem;
-}
-
-.news-detail-content h2 {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 1rem 0;
-  color: #2c3e50;
-}
-
-.news-detail-content h3 {
-  font-size: 1.25rem;
-  margin: 1.25rem 0 0.75rem 0;
-  color: #34495e;
-}
-
-/* Footer */
-.footer {
-  background: #2c3e50;
-  color: white;
-  text-align: center;
-  padding: 2rem 0;
-  margin-top: 3rem;
-}
-
-/* Loading */
-.loading {
-  text-align: center;
-  padding: 2rem;
+  font-size: 0.875rem;
   color: #666;
 }
 
-/* Responsive */
+.news-detail-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.news-detail-content p {
+  margin-bottom: 1.5rem;
+}
+
+.news-detail-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -255,6 +247,7 @@ body {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: background-color 0.3s;
 }
@@ -268,6 +261,8 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
 }
 
 .action-button {
@@ -275,32 +270,39 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.primary-button {
+.action-button.primary {
   background: #667eea;
   color: white;
 }
 
-.primary-button:hover {
-  background: #5a6fd8;
+.action-button.secondary {
+  background: #f8f9fa;
+  color: #666;
+  border: 1px solid #ddd;
 }
 
-.secondary-button {
-  background: #6c757d;
-  color: white;
+.action-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.secondary-button:hover {
-  background: #5a6169;
+/* Footer */
+.footer {
+  background: #2c3e50;
+  color: #ecf0f1;
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 4rem;
 }
-    </style>
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+</style>
 </head>
 <body>
     <header class="header">
@@ -318,24 +320,22 @@ body {
         <a href="../index.html" class="back-button">← 返回首页</a>
         
         <article class="news-detail">
-            <h1 class="news-detail-title">量子-AI混合计算获重大进展</h1>
+            <h1 class="news-detail-title">新闻API暂时不可用</h1>
             
             <div class="news-detail-meta">
-                <span class="news-card-source">量子计算周刊</span>
-                <span class="news-card-time">2025/8/2 18:56:26</span>
+                <span>来源：系统提示</span>
+                <span>发布时间：2025/8/2 23:01:03</span>
             </div>
             
-            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=200&fit=crop" alt="量子-AI混合计算获重大进展" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; margin-bottom: 2rem;">
+            <img src="https://via.placeholder.com/400x200?text=API+Unavailable" alt="新闻API暂时不可用" class="news-detail-image">
             
             <div class="news-detail-content">
-                <p>IBM与Google联合发布量子-AI混合处理器，成功将量子计算与神经网络技术结合。</p>
-                     <p>这一混合系统在解决组合优化、密码破解和分子模拟等特定问题时，相比传统计算方法实现了指数级的性能提升。量子比特与神经网络的协同工作开创了计算的新范式。</p>
-                     <p>研究团队表示，这项技术将首先应用于药物发现、材料科学和金融建模等领域，为解决人类面临的重大挑战提供新工具。</p>
+                <p>抱歉，当前无法获取最新的AI新闻数据。</p><p>这可能是由于API密钥未配置或网络连接问题导致的。</p><p>请联系管理员或稍后再试。</p>
             </div>
             
             <div class="action-buttons">
-                <a href="/" class="action-button primary-button">查看更多新闻</a>
-                <a href="https://research.ibm.com/quantum-ai" class="action-button secondary-button" target="_blank">查看原文</a>
+                <a href="#" target="_blank" class="action-button primary">查看原文</a>
+                <button onclick="shareNews()" class="action-button secondary">分享</button>
             </div>
         </article>
     </main>
@@ -347,22 +347,21 @@ body {
     </footer>
 
     <script>
-        // 分享功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 检查是否支持Web Share API
+        function shareNews() {
             if (navigator.share) {
-                document.addEventListener('click', function(e) {
-                    if (e.target.closest('.share-button')) {
-                        e.preventDefault();
-                        navigator.share({
-                            title: '量子-AI混合计算获重大进展',
-                            text: 'IBM与Google联合发布量子-AI混合处理器，将量子计算与神经网络结合，在特定优化问题上实现指数级性能提升。',
-                            url: window.location.href
-                        });
-                    }
+                navigator.share({
+                    title: '新闻API暂时不可用',
+                    text: '真实新闻数据获取失败，请稍后再试或联系管理员配置API密钥。',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('链接已复制到剪贴板');
+                }).catch(() => {
+                    alert('分享失败，请手动复制链接');
                 });
             }
-        });
+        }
     </script>
 </body>
 </html>

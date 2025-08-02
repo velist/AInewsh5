@@ -52,20 +52,27 @@ body {
 .nav a {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
-.nav a:hover {
-  background-color: rgba(255,255,255,0.2);
+.nav a:hover, .nav a.active {
+  opacity: 0.8;
 }
 
-.nav a.active {
-  background-color: rgba(255,255,255,0.3);
+/* Main Content */
+main {
+  padding: 2rem 0;
+  min-height: calc(100vh - 200px);
 }
 
-/* News Card */
+/* News Cards */
+.news-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
 .news-card {
   background: white;
   border-radius: 8px;
@@ -139,9 +146,10 @@ body {
 
 .news-detail-title {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: bold;
   margin-bottom: 1rem;
   color: #2c3e50;
+  line-height: 1.3;
 }
 
 .news-detail-meta {
@@ -151,46 +159,30 @@ body {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #eee;
-}
-
-.news-detail-content {
-  line-height: 1.8;
-  color: #333;
-}
-
-.news-detail-content p {
-  margin-bottom: 1rem;
-}
-
-.news-detail-content h2 {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 1rem 0;
-  color: #2c3e50;
-}
-
-.news-detail-content h3 {
-  font-size: 1.25rem;
-  margin: 1.25rem 0 0.75rem 0;
-  color: #34495e;
-}
-
-/* Footer */
-.footer {
-  background: #2c3e50;
-  color: white;
-  text-align: center;
-  padding: 2rem 0;
-  margin-top: 3rem;
-}
-
-/* Loading */
-.loading {
-  text-align: center;
-  padding: 2rem;
+  font-size: 0.875rem;
   color: #666;
 }
 
-/* Responsive */
+.news-detail-content {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+}
+
+.news-detail-content p {
+  margin-bottom: 1.5rem;
+}
+
+.news-detail-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -255,6 +247,7 @@ body {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+  font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: background-color 0.3s;
 }
@@ -268,6 +261,8 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
 }
 
 .action-button {
@@ -275,32 +270,39 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.primary-button {
+.action-button.primary {
   background: #667eea;
   color: white;
 }
 
-.primary-button:hover {
-  background: #5a6fd8;
+.action-button.secondary {
+  background: #f8f9fa;
+  color: #666;
+  border: 1px solid #ddd;
 }
 
-.secondary-button {
-  background: #6c757d;
-  color: white;
+.action-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-.secondary-button:hover {
-  background: #5a6169;
+/* Footer */
+.footer {
+  background: #2c3e50;
+  color: #ecf0f1;
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 4rem;
 }
-    </style>
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+</style>
 </head>
 <body>
     <header class="header">
@@ -316,170 +318,30 @@ body {
 
     <main class="container">
         <div class="category-tabs">
-            <div class="category-tab active" onclick="location.href='/'">最新资讯</div>
-            <div class="category-tab" onclick="location.href='/ai-tech.html'">AI技术</div>
-            <div class="category-tab" onclick="location.href='/industry.html'">行业动态</div>
+            <div class="category-tab active">最新资讯</div>
+            <div class="category-tab">AI技术</div>
+            <div class="category-tab">行业动态</div>
         </div>
 
-        <div id="news-container">
+        <div class="news-grid">
             
         <article class="news-card">
             <div class="news-card-header">
                 <div class="news-card-content">
                     <h2 class="news-card-title">
-                        <a href="news/latest_1.html" style="color: inherit; text-decoration: none;">
-                            OpenAI发布GPT-5，性能大幅提升50%
+                        <a href="news/api_unavailable_1.html" style="color: inherit; text-decoration: none;">
+                            新闻API暂时不可用
                         </a>
                     </h2>
-                    <p class="news-card-description">OpenAI最新发布的GPT-5在多个基准测试中表现优异，推理能力和创造性显著增强。该模型在理解复杂指令、代码生成和多语言处理方面都有重大改进。</p>
+                    <p class="news-card-description">真实新闻数据获取失败，请稍后再试或联系管理员配置API密钥。</p>
                     <div class="news-card-meta">
-                        <span class="news-card-source">AI科技日报</span>
-                        <span class="news-card-time" data-time="2025-08-02T14:01:15.057Z">
-                            2025/8/2 22:01:15
+                        <span class="news-card-source">系统提示</span>
+                        <span class="news-card-time" data-time="2025-08-02T15:01:03.707Z">
+                            2025/8/2 23:01:03
                         </span>
                     </div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=200&fit=crop" alt="OpenAI发布GPT-5，性能大幅提升50%" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_2.html" style="color: inherit; text-decoration: none;">
-                            谷歌推出新一代AI模型Gemini Ultra 2.0
-                        </a>
-                    </h2>
-                    <p class="news-card-description">谷歌宣布Gemini Ultra 2.0在数学、推理和代码生成方面超越了现有模型，标志着AI技术的新突破。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">AI新闻周刊</span>
-                        <span class="news-card-time" data-time="2025-08-02T13:20:21.783Z">
-                            2025/8/2 21:20:21
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=400&h=200&fit=crop" alt="谷歌推出新一代AI模型Gemini Ultra 2.0" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_3.html" style="color: inherit; text-decoration: none;">
-                            Claude-4正式发布，对话能力史无前例提升
-                        </a>
-                    </h2>
-                    <p class="news-card-description">Anthropic发布Claude-4，在安全性、准确性和有用性方面都取得了重大突破，被誉为最接近人类对话的AI助手。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">人工智能前沿</span>
-                        <span class="news-card-time" data-time="2025-08-02T11:44:11.578Z">
-                            2025/8/2 19:44:11
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&h=200&fit=crop" alt="Claude-4正式发布，对话能力史无前例提升" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_4.html" style="color: inherit; text-decoration: none;">
-                            微软Azure AI服务大幅升级，集成GPT-5技术
-                        </a>
-                    </h2>
-                    <p class="news-card-description">微软宣布Azure AI服务的重大升级，全面集成最新的GPT-5技术，为企业用户提供更强大的AI能力。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">云计算资讯</span>
-                        <span class="news-card-time" data-time="2025-08-02T12:25:11.025Z">
-                            2025/8/2 20:25:11
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=200&fit=crop" alt="微软Azure AI服务大幅升级，集成GPT-5技术" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_5.html" style="color: inherit; text-decoration: none;">
-                            Meta发布LLaMA 3.1，开源大模型新里程碑
-                        </a>
-                    </h2>
-                    <p class="news-card-description">Meta发布LLaMA 3.1系列模型，包括405B参数的超大规模版本，在开源AI领域树立新标杆。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">机器之心</span>
-                        <span class="news-card-time" data-time="2025-08-02T13:40:24.200Z">
-                            2025/8/2 21:40:24
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop" alt="Meta发布LLaMA 3.1，开源大模型新里程碑" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_6.html" style="color: inherit; text-decoration: none;">
-                            AI芯片竞争白热化，英伟达H200正式量产
-                        </a>
-                    </h2>
-                    <p class="news-card-description">英伟达宣布其最新AI芯片H200正式开始大规模量产，性能相比H100提升60%，进一步巩固其AI芯片领域的领导地位。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">半导体观察</span>
-                        <span class="news-card-time" data-time="2025-08-02T10:05:29.638Z">
-                            2025/8/2 18:05:29
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=200&fit=crop" alt="AI芯片竞争白热化，英伟达H200正式量产" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_7.html" style="color: inherit; text-decoration: none;">
-                            GitHub Copilot Chat升级，编程效率再提升
-                        </a>
-                    </h2>
-                    <p class="news-card-description">GitHub宣布Copilot Chat的重大升级，集成更先进的代码理解和生成能力，帮助开发者提高编程效率。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">开发者日报</span>
-                        <span class="news-card-time" data-time="2025-08-02T09:14:50.174Z">
-                            2025/8/2 17:14:50
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=200&fit=crop" alt="GitHub Copilot Chat升级，编程效率再提升" class="news-card-image">
-            </div>
-        </article>
-    
-        <article class="news-card">
-            <div class="news-card-header">
-                <div class="news-card-content">
-                    <h2 class="news-card-title">
-                        <a href="news/latest_8.html" style="color: inherit; text-decoration: none;">
-                            AI音乐生成突破，Suno AI发布V4版本
-                        </a>
-                    </h2>
-                    <p class="news-card-description">Suno AI发布V4版本，在音乐生成质量和创意性方面取得重大突破，生成的音乐几乎难以与人类创作区分。</p>
-                    <div class="news-card-meta">
-                        <span class="news-card-source">创意科技</span>
-                        <span class="news-card-time" data-time="2025-08-02T06:56:34.936Z">
-                            2025/8/2 14:56:34
-                        </span>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=200&fit=crop" alt="AI音乐生成突破，Suno AI发布V4版本" class="news-card-image">
+                <img src="https://via.placeholder.com/400x200?text=API+Unavailable" alt="新闻API暂时不可用" class="news-card-image">
             </div>
         </article>
     
@@ -494,9 +356,8 @@ body {
     </footer>
 
     <script>
-        // 简单的交互功能
+        // 更新时间的脚本
         document.addEventListener('DOMContentLoaded', function() {
-            // 模拟实时更新时间
             function updateTimes() {
                 const timeElements = document.querySelectorAll('.news-card-time');
                 timeElements.forEach(element => {
@@ -517,7 +378,7 @@ body {
             }
             
             updateTimes();
-            setInterval(updateTimes, 60000); // 每分钟更新一次
+            setInterval(updateTimes, 60000);
         });
     </script>
 </body>
