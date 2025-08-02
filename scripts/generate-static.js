@@ -16,38 +16,56 @@ class StaticSiteGenerator {
     this.publicDir = path.join(__dirname, '../public')
     this.newsData = []
     this.categories = ['latest', 'ai-tech', 'industry']
-    this.apiKey = process.env.GNEWS_API_KEY || process.env.VITE_GNEWS_API_KEY || process.env.NEWS_API_KEY || process.env.API_KEY
+    this.gnewsApiKey = process.env.VITE_GNEWS_API_KEY || process.env.GNEWS_API_KEY
+    this.newsdataApiKey = process.env.VITE_NEWSDATA_API_KEY || process.env.NEWSDATA_API_KEY
+    this.newsApiKey = process.env.VITE_NEWS_API_KEY || process.env.NEWS_API_KEY
   }
 
   // 获取真实新闻数据
   async fetchRealNewsData() {
     console.log('🔍 检查API密钥配置...')
-    console.log('GNEWS_API_KEY存在:', !!process.env.GNEWS_API_KEY)
-    console.log('VITE_GNEWS_API_KEY存在:', !!process.env.VITE_GNEWS_API_KEY)
-    console.log('NEWS_API_KEY存在:', !!process.env.NEWS_API_KEY)
-    console.log('API_KEY存在:', !!process.env.API_KEY)
-    console.log('所有环境变量:', Object.keys(process.env).filter(key => key.includes('API') || key.includes('KEY')).join(', '))
+    console.log('VITE_GNEWS_API_KEY存在:', !!this.gnewsApiKey)
+    console.log('VITE_NEWSDATA_API_KEY存在:', !!this.newsdataApiKey) 
+    console.log('VITE_NEWS_API_KEY存在:', !!this.newsApiKey)
     
-    if (!this.apiKey) {
-      console.log('⚠️  API密钥未找到，无法获取真实新闻')
-      console.log('请检查GitHub Secrets中的GNEWS_API_KEY配置')
-      return null
+    // 优先使用GNews API
+    if (this.gnewsApiKey) {
+      console.log('🌐 使用GNews API获取新闻...')
+      const result = await this.fetchFromGNews()
+      if (result) return result
     }
-
-    console.log('🌐 正在调用真实新闻API...')
-    console.log('使用API密钥长度:', this.apiKey.length)
     
+    // 备用：NewsData API
+    if (this.newsdataApiKey) {
+      console.log('🌐 使用NewsData API获取新闻...')
+      const result = await this.fetchFromNewsData()
+      if (result) return result
+    }
+    
+    // 备用：News API
+    if (this.newsApiKey) {
+      console.log('🌐 使用News API获取新闻...')
+      const result = await this.fetchFromNewsAPI()
+      if (result) return result
+    }
+    
+    console.log('⚠️  所有API密钥均未找到或调用失败')
+    return null
+  }
+
+  // GNews API调用
+  async fetchFromGNews() {
     try {
       const newsData = { latest: [], 'ai-tech': [], industry: [] }
       
       // 获取最新AI新闻
       const latestResponse = await axios.get('https://gnews.io/api/v4/search', {
         params: {
-          q: 'AI OR "artificial intelligence" OR ChatGPT OR "machine learning" OR OpenAI OR Google',
+          q: 'AI OR "artificial intelligence" OR ChatGPT OR "machine learning" OR OpenAI',
           lang: 'en',
           country: 'us',
           max: 15,
-          token: this.apiKey
+          token: this.gnewsApiKey
         },
         timeout: 15000
       })
@@ -55,11 +73,11 @@ class StaticSiteGenerator {
       // 获取AI技术新闻  
       const techResponse = await axios.get('https://gnews.io/api/v4/search', {
         params: {
-          q: '"deep learning" OR "neural network" OR "large language model" OR "computer vision"',
+          q: '"deep learning" OR "neural network" OR "large language model"',
           lang: 'en',
           country: 'us', 
           max: 10,
-          token: this.apiKey
+          token: this.gnewsApiKey
         },
         timeout: 15000
       })
@@ -67,11 +85,11 @@ class StaticSiteGenerator {
       // 获取行业动态新闻
       const industryResponse = await axios.get('https://gnews.io/api/v4/search', {
         params: {
-          q: '"AI investment" OR "AI startup" OR "AI market" OR "tech industry"',
+          q: '"AI investment" OR "AI startup" OR "AI market"',
           lang: 'en',
           country: 'us',
           max: 10, 
-          token: this.apiKey
+          token: this.gnewsApiKey
         },
         timeout: 15000
       })
@@ -125,7 +143,138 @@ class StaticSiteGenerator {
       return newsData
 
     } catch (error) {
-      console.error('❌ 真实API调用失败:', error.message)
+      console.error('❌ GNews API调用失败:', error.message)
+      return null
+    }
+  }
+
+  // NewsData API调用
+  async fetchFromNewsData() {
+    try {
+      const newsData = { latest: [], 'ai-tech': [], industry: [] }
+      
+      const response = await axios.get('https://newsdata.io/api/1/news', {
+        params: {
+          apikey: this.newsdataApiKey,
+          q: 'artificial intelligence OR AI OR machine learning',
+          language: 'en',
+          category: 'technology',
+          size: 20
+        },
+        timeout: 15000
+      })
+
+      if (response.data?.results) {
+        const articles = response.data.results
+        
+        // 分配到不同分类
+        newsData.latest = articles.slice(0, 10).map((article, index) => ({
+          id: `latest_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source_id,
+          publishedAt: article.pubDate,
+          image: article.image_url || 'https://via.placeholder.com/400x200?text=AI+News',
+          category: 'latest',
+          url: article.link
+        }))
+        
+        newsData['ai-tech'] = articles.slice(10, 15).map((article, index) => ({
+          id: `ai_tech_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source_id,
+          publishedAt: article.pubDate,
+          image: article.image_url || 'https://via.placeholder.com/400x200?text=AI+Tech',
+          category: 'ai-tech',
+          url: article.link
+        }))
+        
+        newsData.industry = articles.slice(15, 20).map((article, index) => ({
+          id: `industry_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source_id,
+          publishedAt: article.pubDate,
+          image: article.image_url || 'https://via.placeholder.com/400x200?text=AI+Industry',
+          category: 'industry',
+          url: article.link
+        }))
+      }
+
+      console.log(`✅ NewsData API获取到新闻: 最新${newsData.latest.length}条, AI技术${newsData['ai-tech'].length}条, 行业动态${newsData.industry.length}条`)
+      return newsData
+
+    } catch (error) {
+      console.error('❌ NewsData API调用失败:', error.message)
+      return null
+    }
+  }
+
+  // News API调用
+  async fetchFromNewsAPI() {
+    try {
+      const newsData = { latest: [], 'ai-tech': [], industry: [] }
+      
+      const response = await axios.get('https://newsapi.org/v2/everything', {
+        params: {
+          apiKey: this.newsApiKey,
+          q: 'artificial intelligence OR AI OR machine learning',
+          sortBy: 'publishedAt',
+          language: 'en',
+          pageSize: 20
+        },
+        timeout: 15000
+      })
+
+      if (response.data?.articles) {
+        const articles = response.data.articles
+        
+        newsData.latest = articles.slice(0, 10).map((article, index) => ({
+          id: `latest_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source.name,
+          publishedAt: article.publishedAt,
+          image: article.urlToImage || 'https://via.placeholder.com/400x200?text=AI+News',
+          category: 'latest',
+          url: article.url
+        }))
+        
+        newsData['ai-tech'] = articles.slice(10, 15).map((article, index) => ({
+          id: `ai_tech_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source.name,
+          publishedAt: article.publishedAt,
+          image: article.urlToImage || 'https://via.placeholder.com/400x200?text=AI+Tech',
+          category: 'ai-tech',
+          url: article.url
+        }))
+        
+        newsData.industry = articles.slice(15, 20).map((article, index) => ({
+          id: `industry_${index + 1}`,
+          title: article.title,
+          description: article.description,
+          content: this.generateContent(article.description, article.content),
+          source: article.source.name,
+          publishedAt: article.publishedAt,
+          image: article.urlToImage || 'https://via.placeholder.com/400x200?text=AI+Industry',
+          category: 'industry',
+          url: article.url
+        }))
+      }
+
+      console.log(`✅ News API获取到新闻: 最新${newsData.latest.length}条, AI技术${newsData['ai-tech'].length}条, 行业动态${newsData.industry.length}条`)
+      return newsData
+
+    } catch (error) {
+      console.error('❌ News API调用失败:', error.message)
       return null
     }
   }
